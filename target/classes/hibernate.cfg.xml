@@ -11,7 +11,7 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property> <!-- DB Dialect -->
-   		<property name="connection.url">jdbc:postgresql://localhost/proje</property> <!-- BD Mane -->
+   		<property name="connection.url">jdbc:postgresql://localhost/studentmanagerdb</property> <!-- BD Mane -->
    		<property name="connection.username">postgres</property> <!-- DB User -->
    		<property name="connection.password">21wvtmykx</property> <!-- DB Password -->
    		<property name="connection.driver_class">org.postgresql.Driver</property> <!-- DB Driver -->

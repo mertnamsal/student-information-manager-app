@@ -28,8 +28,18 @@ public class Ogrenci {
 	@OneToOne(cascade = CascadeType.ALL)
 	private OgrenciBilgi ogrenciBilgileri;
 	
-	private String resim;
+	private byte[] image;
 
+	
+	
+	public Ogrenci(String email, String ad, String soyad, OgrenciBilgi ogrenciBilgileri, byte[] image) {
+		super();
+		this.email = email;
+		this.ad = ad;
+		this.soyad = soyad;
+		this.ogrenciBilgileri = ogrenciBilgileri;
+		this.image = image;
+	}
 
 	public Ogrenci(String email, String ad, String soyad) {
 		super();
@@ -90,13 +100,15 @@ public class Ogrenci {
 		this.ogrenciBilgileri = ogrenciBilgileri;
 	}
 
-	public String getResim() {
-		return resim;
+	public byte[] getImage() {
+		return image;
 	}
 
-	public void setResim(String resim) {
-		this.resim = resim;
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
+
+	
 
 	
 	

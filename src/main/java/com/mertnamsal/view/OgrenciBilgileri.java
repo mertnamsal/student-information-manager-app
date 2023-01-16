@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.mertnamsal.entity.Ogrenci;
 import com.mertnamsal.entity.OgrenciBilgi;
@@ -17,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -25,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -33,9 +36,12 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import java.awt.Color;
+import javax.swing.border.LineBorder;
 
 public class OgrenciBilgileri {
 
@@ -72,8 +78,11 @@ public class OgrenciBilgileri {
 	private ResourceBundle resourceBundle;
 	private OgrenciService ogrenciService;
 	private JScrollPane scrollPane_1;
-	private byte[] resim;
+	private byte[] image;
 	private String path;
+	private ImageIcon myimage;
+	private String imagePaths;
+	private String imagePath = " ";
  	
 
 	/**
@@ -143,6 +152,7 @@ public class OgrenciBilgileri {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.getContentPane().setBackground(new Color(40, 40, 40));
 		frame.getContentPane().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -158,15 +168,21 @@ public class OgrenciBilgileri {
 				
 			}
 		});
-		frame.setBounds(100, 100, 942, 579);
+		frame.setBounds(100, 100, 1204, 653);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 232, 735, 297);
+		scrollPane.setBounds(25, 275, 894, 297);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.setSelectionForeground(new Color(225, 109, 4));
+		table.setSelectionBackground(new Color(40, 40, 40));
+		table.setGridColor(Color.LIGHT_GRAY);
+		table.setFont(new Font("Tahoma", Font.BOLD, 11));
+		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table.setBackground(Color.LIGHT_GRAY);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -200,7 +216,19 @@ public class OgrenciBilgileri {
 					if(ogrenci.getOgrenciBilgileri().getCinsiyet().equalsIgnoreCase("WOMAN")) {
 						comboBoxGender.setSelectedItem(comboBoxGender.getItemAt(1));
 					}
-					lblFoto.setIcon(new ImageIcon(OgrenciBilgileri.class.getResource(ogrenci.getResim())));
+					
+					byte[] r = ogrenci.getImage();
+					if(ogrenci.getImage() != null) {
+						ImageIcon image = new ImageIcon(r);
+						Image img = image.getImage();
+						Image img2 = img.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+						ImageIcon imgicon = new ImageIcon(img2);
+						lblFoto.setIcon(imgicon);
+					}
+					else {
+						lblFoto.setIcon(null);
+					}
+					
 					
 				}
 			}
@@ -215,7 +243,8 @@ public class OgrenciBilgileri {
 		scrollPane.setViewportView(table);
 		
 		lblId = new JLabel("ID:");
-		lblId.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblId.setForeground(Color.WHITE);
+		lblId.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblId.setBounds(36, 46, 70, 20);
 		frame.getContentPane().add(lblId);
 		
@@ -241,39 +270,45 @@ public class OgrenciBilgileri {
 		frame.getContentPane().add(textFieldLastName);
 		
 		lblEmail = new JLabel("Email:");
-		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblEmail.setForeground(Color.WHITE);
+		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblEmail.setBounds(36, 76, 70, 20);
 		frame.getContentPane().add(lblEmail);
 		
 		lblFirstName = new JLabel("First Name:");
-		lblFirstName.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblFirstName.setBounds(36, 106, 70, 20);
+		lblFirstName.setForeground(Color.WHITE);
+		lblFirstName.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblFirstName.setBounds(36, 106, 90, 20);
 		frame.getContentPane().add(lblFirstName);
 		
 		lblLastName = new JLabel("Last Name:");
-		lblLastName.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblLastName.setBounds(36, 136, 70, 20);
+		lblLastName.setForeground(Color.WHITE);
+		lblLastName.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblLastName.setBounds(36, 136, 90, 20);
 		frame.getContentPane().add(lblLastName);
 		
 		lblCinsiyet = new JLabel("Gender:");
-		lblCinsiyet.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCinsiyet.setForeground(Color.WHITE);
+		lblCinsiyet.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblCinsiyet.setBounds(36, 166, 70, 20);
 		frame.getContentPane().add(lblCinsiyet);
 		
 		comboBoxGender = new JComboBox();
-		comboBoxGender.setFont(new Font("Tahoma", Font.BOLD, 11));
+		comboBoxGender.setBackground(Color.DARK_GRAY);
+		comboBoxGender.setForeground(Color.WHITE);
+		comboBoxGender.setFont(new Font("Tahoma", Font.BOLD, 10));
 		comboBoxGender.setModel(new DefaultComboBoxModel(new String[] {"MAN", "WOMAN"}));
 		comboBoxGender.setBounds(127, 165, 110, 22);
 		frame.getContentPane().add(comboBoxGender);
 		
 		btnEmailSorgula = new JButton("Query By Email");
+		btnEmailSorgula.setBackground(Color.DARK_GRAY);
+		btnEmailSorgula.setForeground(Color.WHITE);
 		btnEmailSorgula.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!textFieldEmail.getText().isEmpty()) {
 					List<Ogrenci> list =ogrenciService.findByEmail(textFieldEmail.getText());
-					
-					
-					
+						
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					Object[] column = new Object[4];
 					model.setRowCount(0);
@@ -289,11 +324,13 @@ public class OgrenciBilgileri {
 				}
 			}
 		});
-		btnEmailSorgula.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnEmailSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnEmailSorgula.setBounds(260, 76, 174, 20);
 		frame.getContentPane().add(btnEmailSorgula);
 		
 		btnFirstNameSorgula = new JButton("Query By First Name");
+		btnFirstNameSorgula.setBackground(Color.DARK_GRAY);
+		btnFirstNameSorgula.setForeground(Color.WHITE);
 		btnFirstNameSorgula.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -320,11 +357,13 @@ public class OgrenciBilgileri {
 				
 			}
 		});
-		btnFirstNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnFirstNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnFirstNameSorgula.setBounds(260, 106, 174, 20);
 		frame.getContentPane().add(btnFirstNameSorgula);
 		
 		btnLastNameSorgula = new JButton("Query By Last Name");
+		btnLastNameSorgula.setBackground(Color.DARK_GRAY);
+		btnLastNameSorgula.setForeground(Color.WHITE);
 		btnLastNameSorgula.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -348,69 +387,74 @@ public class OgrenciBilgileri {
 				
 			}
 		});
-		btnLastNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnLastNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnLastNameSorgula.setBounds(260, 136, 174, 20);
 		frame.getContentPane().add(btnLastNameSorgula);
 		
 		lblTel = new JLabel("Telephone:");
-		lblTel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTel.setBounds(444, 61, 76, 51);
+		lblTel.setForeground(Color.WHITE);
+		lblTel.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblTel.setBounds(464, 61, 76, 51);
 		frame.getContentPane().add(lblTel);
 		
 		lblAdres = new JLabel("Address:");
-		lblAdres.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblAdres.setBounds(444, 121, 76, 51);
+		lblAdres.setForeground(Color.WHITE);
+		lblAdres.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblAdres.setBounds(464, 119, 76, 37);
 		frame.getContentPane().add(lblAdres);
 		
 		textFieldTel1 = new JTextField();
 		textFieldTel1.setColumns(10);
-		textFieldTel1.setBounds(530, 75, 110, 20);
+		textFieldTel1.setBounds(587, 76, 128, 20);
 		frame.getContentPane().add(textFieldTel1);
 		
 		textFieldTel2 = new JTextField();
 		textFieldTel2.setColumns(10);
-		textFieldTel2.setBounds(668, 76, 110, 20);
+		textFieldTel2.setBounds(789, 76, 130, 20);
 		frame.getContentPane().add(textFieldTel2);
 		
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(530, 106, 110, 80);
+		scrollPane_1.setBounds(587, 106, 128, 80);
 		frame.getContentPane().add(scrollPane_1);
 		
 		textFieldAdres1 = new JEditorPane();
 		scrollPane_1.setViewportView(textFieldAdres1);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(668, 106, 110, 80);
+		scrollPane_2.setBounds(789, 106, 130, 80);
 		frame.getContentPane().add(scrollPane_2);
 		
 		textFieldAdres2 = new JEditorPane();
 		scrollPane_2.setViewportView(textFieldAdres2);
 		
 		lblContactInfo = new JLabel("Contact Info 1");
-		lblContactInfo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblContactInfo.setBounds(530, 29, 110, 20);
+		lblContactInfo.setForeground(Color.WHITE);
+		lblContactInfo.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblContactInfo.setBounds(587, 29, 130, 37);
 		frame.getContentPane().add(lblContactInfo);
 		
 		lblContactInfo_2 = new JLabel("Contact Info 2");
-		lblContactInfo_2.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblContactInfo_2.setBounds(668, 29, 110, 20);
+		lblContactInfo_2.setForeground(Color.WHITE);
+		lblContactInfo_2.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblContactInfo_2.setBounds(789, 29, 136, 37);
 		frame.getContentPane().add(lblContactInfo_2);
 		
 		lblFoto = new JLabel("");
-		lblFoto.setIcon(new ImageIcon(OgrenciBilgileri.class.getResource("/com/mertnamsal/view/resources/defaultkullanici,,iii.jpg")));
-		lblFoto.setBounds(801, 46, 90, 90);
+		lblFoto.setIcon(null);
+		lblFoto.setBounds(989, 46, 150, 150);
 		frame.getContentPane().add(lblFoto);
-		path = lblFoto.getIcon().toString();
-		path = path.replace("\\", "/");
-		path = path.substring(path.indexOf("com")-1);
+		path = null;
 		
 		
 		lblLanguage = new JLabel("Language:");
+		lblLanguage.setForeground(Color.WHITE);
 		lblLanguage.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblLanguage.setBounds(801, 439, 58, 20);
+		lblLanguage.setBounds(1077, 520, 58, 20);
 		frame.getContentPane().add(lblLanguage);
 		
 		comboBoxLanguage = new JComboBox();
+		comboBoxLanguage.setBackground(Color.DARK_GRAY);
+		comboBoxLanguage.setForeground(Color.WHITE);
 		comboBoxLanguage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				resourceBundle = ResourceBundle.getBundle("com/mertnamsal/config/resource_bundle");
@@ -432,21 +476,25 @@ public class OgrenciBilgileri {
 		});
 		comboBoxLanguage.setFont(new Font("Tahoma", Font.BOLD, 11));
 		comboBoxLanguage.setModel(new DefaultComboBoxModel(new String[] {"English", "Turkish", "French"}));
-		comboBoxLanguage.setBounds(801, 479, 72, 22);
+		comboBoxLanguage.setBounds(1077, 566, 72, 22);
 		frame.getContentPane().add(comboBoxLanguage);
 		
 		btnGetAll = new JButton("Get All");
+		btnGetAll.setBackground(Color.DARK_GRAY);
+		btnGetAll.setForeground(Color.WHITE);
 		btnGetAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tabloDoldur();
 				
 			}
 		});
-		btnGetAll.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnGetAll.setBounds(250, 198, 110, 23);
+		btnGetAll.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnGetAll.setBounds(25, 227, 212, 23);
 		frame.getContentPane().add(btnGetAll);
 		
 		btnSave = new JButton("Save");
+		btnSave.setBackground(Color.DARK_GRAY);
+		btnSave.setForeground(Color.WHITE);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -454,22 +502,26 @@ public class OgrenciBilgileri {
 				tabloDoldur();
 			}
 		});
-		btnSave.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnSave.setBounds(380, 198, 110, 23);
+		btnSave.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnSave.setBounds(253, 227, 194, 23);
 		frame.getContentPane().add(btnSave);
 		
 		btnUpdate = new JButton("Update");
+		btnUpdate.setBackground(Color.DARK_GRAY);
+		btnUpdate.setForeground(Color.WHITE);
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				update();
 				tabloDoldur();
 			}
 		});
-		btnUpdate.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnUpdate.setBounds(510, 198, 110, 23);
+		btnUpdate.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnUpdate.setBounds(470, 227, 214, 23);
 		frame.getContentPane().add(btnUpdate);
 		
 		btnDelete = new JButton("Delete");
+		btnDelete.setBackground(Color.DARK_GRAY);
+		btnDelete.setForeground(Color.WHITE);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -485,9 +537,33 @@ public class OgrenciBilgileri {
 				}
 			}
 		});
-		btnDelete.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnDelete.setBounds(640, 198, 110, 23);
+		btnDelete.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnDelete.setBounds(714, 227, 205, 23);
 		frame.getContentPane().add(btnDelete);
+		
+		JButton btnNewButton = new JButton("Add Photo");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(new File("user.dir"));
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("All Pic", "png", "jpg", "jpeg", "gif");
+				fc.addChoosableFileFilter(filter);
+				int a = fc.showSaveDialog(null);
+				if (a == JFileChooser.APPROVE_OPTION) {
+				File f = fc.getSelectedFile();
+				String p = f.getAbsolutePath();
+				imagePaths = fc.getSelectedFile().getAbsolutePath();
+				lblFoto.setIcon(seticon(p,image));
+				
+				
+				}
+			}
+		});
+		btnNewButton.setForeground(Color.WHITE);
+		btnNewButton.setBackground(Color.DARK_GRAY);
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnNewButton.setBounds(989, 227, 150, 23);
+		frame.getContentPane().add(btnNewButton);
 		
 		
 	}
@@ -505,9 +581,27 @@ public class OgrenciBilgileri {
 			if(!textFieldTel2.getText().isEmpty()) {
 				ogrenciBilgi.setTel2(Long.parseLong(textFieldTel2.getText()));
 			}
-
+			byte[] data=null;
+			if(imagePaths != null) {
+				FileInputStream fis;
+				
+				try {
+					fis = new FileInputStream(imagePaths);
+					data = new byte[fis.available()];
+					fis.read(data);
+					
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			
+			
 			Ogrenci ogrenci = new Ogrenci(textFieldEmail.getText(), textFieldFirstName.getText(), textFieldLastName.getText(), ogrenciBilgi);
-			ogrenci.setResim(path);
+			ogrenci.setImage(data);
 	
 			ogrenciService.create(ogrenci);
 		}else {
@@ -522,8 +616,8 @@ public class OgrenciBilgileri {
 		for (int i = 0; i <list.size(); i++) {
 			column[0]=list.get(i).getId();
 			column[1]=list.get(i).getEmail();
-			column[2]=list.get(i).getAd();
-			column[3]=list.get(i).getSoyad();
+			column[2]=list.get(i).getAd().substring(0,1).toUpperCase()+list.get(i).getAd().substring(1).toLowerCase();
+			column[3]=list.get(i).getSoyad().substring(0,1).toUpperCase()+list.get(i).getSoyad().substring(1).toLowerCase();
 			model.addRow(column);
 		}
 	}
@@ -541,11 +635,37 @@ public class OgrenciBilgileri {
 				ogrenciBilgi.setTel2(Long.parseLong(textFieldTel2.getText()));
 			}
 			
+			FileInputStream fis;
+			byte[] data=null;
+			try {
+				fis = new FileInputStream(imagePaths);
+				data = new byte[fis.available()];
+				fis.read(data);
+				
+				
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			Ogrenci ogrenci = new Ogrenci(textFieldEmail.getText(), textFieldFirstName.getText(), textFieldLastName.getText(), ogrenciBilgi);
-			ogrenci.setResim(path);
+			ogrenci.setImage(data);
 			ogrenciService.update(Long.parseLong(textFieldID.getText()),ogrenci);
 		}else {
 			JOptionPane.showMessageDialog(null,"BOŞ ALANLARI DOLDURUN");
 		}
+	}
+	
+	public ImageIcon seticon(String m, byte[] image) {
+		if (m != null) {
+			myimage = new ImageIcon(m);
+		} else {
+			myimage = new ImageIcon(image);
+		}
+		Image img1 = myimage.getImage();
+		Image img2 = img1.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_SMOOTH);
+		ImageIcon i = new ImageIcon(img2);
+		return i;
 	}
 }
