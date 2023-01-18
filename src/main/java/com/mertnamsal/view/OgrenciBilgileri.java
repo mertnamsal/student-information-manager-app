@@ -19,13 +19,11 @@ import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
 import java.awt.Image;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
@@ -36,7 +34,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
@@ -45,7 +42,7 @@ import javax.swing.border.LineBorder;
 
 public class OgrenciBilgileri {
 
-	private JFrame frame;
+	private JFrame frmStudentManagerApp;
 	private JTable table;
 	private JTextField textFieldID;
 	private JTextField textFieldEmail;
@@ -93,7 +90,7 @@ public class OgrenciBilgileri {
 			public void run() {
 				try {
 					OgrenciBilgileri window = new OgrenciBilgileri();
-					window.frame.setVisible(true);
+					window.frmStudentManagerApp.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -151,9 +148,10 @@ public class OgrenciBilgileri {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(40, 40, 40));
-		frame.getContentPane().addMouseListener(new MouseAdapter() {
+		frmStudentManagerApp = new JFrame();
+		frmStudentManagerApp.setTitle("Student Manager App");
+		frmStudentManagerApp.getContentPane().setBackground(new Color(40, 40, 40));
+		frmStudentManagerApp.getContentPane().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				textFieldID.setText("");
@@ -164,17 +162,19 @@ public class OgrenciBilgileri {
 				textFieldAdres1.setText("");
 				textFieldTel2.setText("");
 				textFieldAdres2.setText("");
-				lblFoto.setIcon(new ImageIcon(OgrenciBilgileri.class.getResource("/com/mertnamsal/view/resources/defaultkullanici,,iii.jpg")));
+				lblFoto.setIcon(null);
+				tabloDoldur();
+				
 				
 			}
 		});
-		frame.setBounds(100, 100, 1204, 653);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmStudentManagerApp.setBounds(100, 100, 1204, 653);
+		frmStudentManagerApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmStudentManagerApp.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(25, 275, 894, 297);
-		frame.getContentPane().add(scrollPane);
+		frmStudentManagerApp.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		table.setSelectionForeground(new Color(225, 109, 4));
@@ -246,52 +246,52 @@ public class OgrenciBilgileri {
 		lblId.setForeground(Color.WHITE);
 		lblId.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblId.setBounds(36, 46, 70, 20);
-		frame.getContentPane().add(lblId);
+		frmStudentManagerApp.getContentPane().add(lblId);
 		
 		textFieldID = new JTextField();
 		textFieldID.setEditable(false);
 		textFieldID.setBounds(127, 46, 110, 20);
-		frame.getContentPane().add(textFieldID);
+		frmStudentManagerApp.getContentPane().add(textFieldID);
 		textFieldID.setColumns(10);
 		
 		textFieldEmail = new JTextField();
 		textFieldEmail.setColumns(10);
 		textFieldEmail.setBounds(127, 76, 110, 20);
-		frame.getContentPane().add(textFieldEmail);
+		frmStudentManagerApp.getContentPane().add(textFieldEmail);
 		
 		textFieldFirstName = new JTextField();
 		textFieldFirstName.setColumns(10);
 		textFieldFirstName.setBounds(127, 106, 110, 20);
-		frame.getContentPane().add(textFieldFirstName);
+		frmStudentManagerApp.getContentPane().add(textFieldFirstName);
 		
 		textFieldLastName = new JTextField();
 		textFieldLastName.setColumns(10);
 		textFieldLastName.setBounds(127, 136, 110, 20);
-		frame.getContentPane().add(textFieldLastName);
+		frmStudentManagerApp.getContentPane().add(textFieldLastName);
 		
 		lblEmail = new JLabel("Email:");
 		lblEmail.setForeground(Color.WHITE);
 		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblEmail.setBounds(36, 76, 70, 20);
-		frame.getContentPane().add(lblEmail);
+		frmStudentManagerApp.getContentPane().add(lblEmail);
 		
 		lblFirstName = new JLabel("First Name:");
 		lblFirstName.setForeground(Color.WHITE);
 		lblFirstName.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblFirstName.setBounds(36, 106, 90, 20);
-		frame.getContentPane().add(lblFirstName);
+		frmStudentManagerApp.getContentPane().add(lblFirstName);
 		
 		lblLastName = new JLabel("Last Name:");
 		lblLastName.setForeground(Color.WHITE);
 		lblLastName.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblLastName.setBounds(36, 136, 90, 20);
-		frame.getContentPane().add(lblLastName);
+		frmStudentManagerApp.getContentPane().add(lblLastName);
 		
 		lblCinsiyet = new JLabel("Gender:");
 		lblCinsiyet.setForeground(Color.WHITE);
 		lblCinsiyet.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblCinsiyet.setBounds(36, 166, 70, 20);
-		frame.getContentPane().add(lblCinsiyet);
+		frmStudentManagerApp.getContentPane().add(lblCinsiyet);
 		
 		comboBoxGender = new JComboBox();
 		comboBoxGender.setBackground(Color.DARK_GRAY);
@@ -299,7 +299,7 @@ public class OgrenciBilgileri {
 		comboBoxGender.setFont(new Font("Tahoma", Font.BOLD, 10));
 		comboBoxGender.setModel(new DefaultComboBoxModel(new String[] {"MAN", "WOMAN"}));
 		comboBoxGender.setBounds(127, 165, 110, 22);
-		frame.getContentPane().add(comboBoxGender);
+		frmStudentManagerApp.getContentPane().add(comboBoxGender);
 		
 		btnEmailSorgula = new JButton("Query By Email");
 		btnEmailSorgula.setBackground(Color.DARK_GRAY);
@@ -326,7 +326,7 @@ public class OgrenciBilgileri {
 		});
 		btnEmailSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnEmailSorgula.setBounds(260, 76, 174, 20);
-		frame.getContentPane().add(btnEmailSorgula);
+		frmStudentManagerApp.getContentPane().add(btnEmailSorgula);
 		
 		btnFirstNameSorgula = new JButton("Query By First Name");
 		btnFirstNameSorgula.setBackground(Color.DARK_GRAY);
@@ -359,7 +359,7 @@ public class OgrenciBilgileri {
 		});
 		btnFirstNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnFirstNameSorgula.setBounds(260, 106, 174, 20);
-		frame.getContentPane().add(btnFirstNameSorgula);
+		frmStudentManagerApp.getContentPane().add(btnFirstNameSorgula);
 		
 		btnLastNameSorgula = new JButton("Query By Last Name");
 		btnLastNameSorgula.setBackground(Color.DARK_GRAY);
@@ -389,40 +389,40 @@ public class OgrenciBilgileri {
 		});
 		btnLastNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnLastNameSorgula.setBounds(260, 136, 174, 20);
-		frame.getContentPane().add(btnLastNameSorgula);
+		frmStudentManagerApp.getContentPane().add(btnLastNameSorgula);
 		
 		lblTel = new JLabel("Telephone:");
 		lblTel.setForeground(Color.WHITE);
 		lblTel.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblTel.setBounds(464, 61, 76, 51);
-		frame.getContentPane().add(lblTel);
+		lblTel.setBounds(464, 61, 113, 51);
+		frmStudentManagerApp.getContentPane().add(lblTel);
 		
 		lblAdres = new JLabel("Address:");
 		lblAdres.setForeground(Color.WHITE);
 		lblAdres.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblAdres.setBounds(464, 119, 76, 37);
-		frame.getContentPane().add(lblAdres);
+		frmStudentManagerApp.getContentPane().add(lblAdres);
 		
 		textFieldTel1 = new JTextField();
 		textFieldTel1.setColumns(10);
 		textFieldTel1.setBounds(587, 76, 128, 20);
-		frame.getContentPane().add(textFieldTel1);
+		frmStudentManagerApp.getContentPane().add(textFieldTel1);
 		
 		textFieldTel2 = new JTextField();
 		textFieldTel2.setColumns(10);
 		textFieldTel2.setBounds(789, 76, 130, 20);
-		frame.getContentPane().add(textFieldTel2);
+		frmStudentManagerApp.getContentPane().add(textFieldTel2);
 		
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(587, 106, 128, 80);
-		frame.getContentPane().add(scrollPane_1);
+		frmStudentManagerApp.getContentPane().add(scrollPane_1);
 		
 		textFieldAdres1 = new JEditorPane();
 		scrollPane_1.setViewportView(textFieldAdres1);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(789, 106, 130, 80);
-		frame.getContentPane().add(scrollPane_2);
+		frmStudentManagerApp.getContentPane().add(scrollPane_2);
 		
 		textFieldAdres2 = new JEditorPane();
 		scrollPane_2.setViewportView(textFieldAdres2);
@@ -431,18 +431,18 @@ public class OgrenciBilgileri {
 		lblContactInfo.setForeground(Color.WHITE);
 		lblContactInfo.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblContactInfo.setBounds(587, 29, 130, 37);
-		frame.getContentPane().add(lblContactInfo);
+		frmStudentManagerApp.getContentPane().add(lblContactInfo);
 		
 		lblContactInfo_2 = new JLabel("Contact Info 2");
 		lblContactInfo_2.setForeground(Color.WHITE);
 		lblContactInfo_2.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblContactInfo_2.setBounds(789, 29, 136, 37);
-		frame.getContentPane().add(lblContactInfo_2);
+		frmStudentManagerApp.getContentPane().add(lblContactInfo_2);
 		
 		lblFoto = new JLabel("");
 		lblFoto.setIcon(null);
 		lblFoto.setBounds(989, 46, 150, 150);
-		frame.getContentPane().add(lblFoto);
+		frmStudentManagerApp.getContentPane().add(lblFoto);
 		path = null;
 		
 		
@@ -450,7 +450,7 @@ public class OgrenciBilgileri {
 		lblLanguage.setForeground(Color.WHITE);
 		lblLanguage.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblLanguage.setBounds(1077, 520, 58, 20);
-		frame.getContentPane().add(lblLanguage);
+		frmStudentManagerApp.getContentPane().add(lblLanguage);
 		
 		comboBoxLanguage = new JComboBox();
 		comboBoxLanguage.setBackground(Color.DARK_GRAY);
@@ -463,21 +463,24 @@ public class OgrenciBilgileri {
 					Locale.setDefault(new Locale("en","EN"));
 					i18n();
 					comboBoxLanguage.setSelectedIndex(0);
+					tabloDoldur();
 				} else if(comboBoxLanguage.getSelectedItem().toString().equalsIgnoreCase(resourceBundle.getString("languagefr"))) {
 					Locale.setDefault(new Locale("fr","FR"));
 					i18n();
 					comboBoxLanguage.setSelectedIndex(2);
+					tabloDoldur();
 				} else if(comboBoxLanguage.getSelectedItem().toString().equalsIgnoreCase(resourceBundle.getString("languagetr"))) {
 					Locale.setDefault(new Locale("tr","TR"));
 					i18n();
 					comboBoxLanguage.setSelectedIndex(1);
+					tabloDoldur();
 				}
 			}
 		});
 		comboBoxLanguage.setFont(new Font("Tahoma", Font.BOLD, 11));
 		comboBoxLanguage.setModel(new DefaultComboBoxModel(new String[] {"English", "Turkish", "French"}));
 		comboBoxLanguage.setBounds(1077, 566, 72, 22);
-		frame.getContentPane().add(comboBoxLanguage);
+		frmStudentManagerApp.getContentPane().add(comboBoxLanguage);
 		
 		btnGetAll = new JButton("Get All");
 		btnGetAll.setBackground(Color.DARK_GRAY);
@@ -490,7 +493,7 @@ public class OgrenciBilgileri {
 		});
 		btnGetAll.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnGetAll.setBounds(25, 227, 212, 23);
-		frame.getContentPane().add(btnGetAll);
+		frmStudentManagerApp.getContentPane().add(btnGetAll);
 		
 		btnSave = new JButton("Save");
 		btnSave.setBackground(Color.DARK_GRAY);
@@ -504,7 +507,7 @@ public class OgrenciBilgileri {
 		});
 		btnSave.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnSave.setBounds(253, 227, 194, 23);
-		frame.getContentPane().add(btnSave);
+		frmStudentManagerApp.getContentPane().add(btnSave);
 		
 		btnUpdate = new JButton("Update");
 		btnUpdate.setBackground(Color.DARK_GRAY);
@@ -517,7 +520,7 @@ public class OgrenciBilgileri {
 		});
 		btnUpdate.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnUpdate.setBounds(470, 227, 214, 23);
-		frame.getContentPane().add(btnUpdate);
+		frmStudentManagerApp.getContentPane().add(btnUpdate);
 		
 		btnDelete = new JButton("Delete");
 		btnDelete.setBackground(Color.DARK_GRAY);
@@ -539,7 +542,7 @@ public class OgrenciBilgileri {
 		});
 		btnDelete.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnDelete.setBounds(714, 227, 205, 23);
-		frame.getContentPane().add(btnDelete);
+		frmStudentManagerApp.getContentPane().add(btnDelete);
 		
 		JButton btnNewButton = new JButton("Add Photo");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -563,8 +566,8 @@ public class OgrenciBilgileri {
 		btnNewButton.setBackground(Color.DARK_GRAY);
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton.setBounds(989, 227, 150, 23);
-		frame.getContentPane().add(btnNewButton);
-		
+		frmStudentManagerApp.getContentPane().add(btnNewButton);
+		tabloDoldur();
 		
 	}
 	public void kaydet() {
@@ -635,19 +638,23 @@ public class OgrenciBilgileri {
 				ogrenciBilgi.setTel2(Long.parseLong(textFieldTel2.getText()));
 			}
 			
-			FileInputStream fis;
 			byte[] data=null;
-			try {
-				fis = new FileInputStream(imagePaths);
-				data = new byte[fis.available()];
-				fis.read(data);
+			if(imagePaths != null) {
+				FileInputStream fis;
 				
-				
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				try {
+					fis = new FileInputStream(imagePaths);
+					data = new byte[fis.available()];
+					fis.read(data);
+					
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			
 			
 			Ogrenci ogrenci = new Ogrenci(textFieldEmail.getText(), textFieldFirstName.getText(), textFieldLastName.getText(), ogrenciBilgi);
 			ogrenci.setImage(data);
