@@ -18,7 +18,6 @@ public class HibernateUtils {
 			configuration.addAnnotatedClass(Ogrenci.class);
 			configuration.addAnnotatedClass(OgrenciBilgi.class);
 
-
 			SessionFactory factory = configuration.configure("hibernate.cfg.xml").buildSessionFactory();
 
 			return factory;

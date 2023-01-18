@@ -325,7 +325,7 @@ public class OgrenciBilgileri {
 			}
 		});
 		btnEmailSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnEmailSorgula.setBounds(260, 76, 174, 20);
+		btnEmailSorgula.setBounds(260, 76, 200, 20);
 		frmStudentManagerApp.getContentPane().add(btnEmailSorgula);
 		
 		btnFirstNameSorgula = new JButton("Query By First Name");
@@ -358,7 +358,7 @@ public class OgrenciBilgileri {
 			}
 		});
 		btnFirstNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnFirstNameSorgula.setBounds(260, 106, 174, 20);
+		btnFirstNameSorgula.setBounds(260, 106, 200, 20);
 		frmStudentManagerApp.getContentPane().add(btnFirstNameSorgula);
 		
 		btnLastNameSorgula = new JButton("Query By Last Name");
@@ -388,19 +388,19 @@ public class OgrenciBilgileri {
 			}
 		});
 		btnLastNameSorgula.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnLastNameSorgula.setBounds(260, 136, 174, 20);
+		btnLastNameSorgula.setBounds(260, 136, 200, 20);
 		frmStudentManagerApp.getContentPane().add(btnLastNameSorgula);
 		
 		lblTel = new JLabel("Telephone:");
 		lblTel.setForeground(Color.WHITE);
 		lblTel.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblTel.setBounds(464, 61, 113, 51);
+		lblTel.setBounds(470, 61, 113, 51);
 		frmStudentManagerApp.getContentPane().add(lblTel);
 		
 		lblAdres = new JLabel("Address:");
 		lblAdres.setForeground(Color.WHITE);
 		lblAdres.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblAdres.setBounds(464, 119, 76, 37);
+		lblAdres.setBounds(470, 128, 76, 37);
 		frmStudentManagerApp.getContentPane().add(lblAdres);
 		
 		textFieldTel1 = new JTextField();
